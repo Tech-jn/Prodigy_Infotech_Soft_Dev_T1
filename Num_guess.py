@@ -1,93 +1,73 @@
 import tkinter as tk
 
-from tkinter import messagebox
-
-import random
+from tkinter import ttk
 
 
 
-class NumberGuessingGame:
+def convert_temperature():
 
-    def __init__(self, master):
+    temp = float(entry_temp.get())
 
-        self.master = master
+    if selected_unit.get() == 'Celsius to Fahrenheit':
 
-        master.title("Number Guessing Game")
+        result = (temp * 9/5) + 32
 
+    else:
 
+        result = (temp - 32) * 5/9
 
-        self.label = tk.Label(master, text="Guess the number between 1 and 100")
-
-        self.label.pack()
-
-
-
-        self.entry = tk.Entry(master)
-
-        self.entry.pack()
+    label_result.config(text=f'Result: {result:.2f} degrees')
 
 
 
-        self.submit_button = tk.Button(master, text="Submit", command=self.check_guess)
+# Create the main window
 
-        self.submit_button.pack()
+root = tk.Tk()
 
+root.title('Temperature Converter')
 
-
-        self.new_game_button = tk.Button(master, text="New Game", command=self.new_game)
-
-        self.new_game_button.pack()
+root.configure(bg='dark blue')  # Set background color of the main window
 
 
 
-        self.number = random.randint(1, 100)
+# Create and place widgets with colors
 
-        self.guesses = 0
+label_temp = tk.Label(root, text='Enter Temperature:', bg='brown', fg='white')
 
+label_temp.grid(row=0, column=0, padx=10, pady=10)
 
+entry_temp = tk.Entry(root, bg='gray', fg='black')
 
-    def check_guess(self):
-
-        try:
-
-            guess = int(self.entry.get())
-
-            self.guesses += 1
-
-            if guess < self.number:
-
-                messagebox.showinfo("Result", "Too low! Try again.")
-
-            elif guess > self.number:
-
-                messagebox.showinfo("Result", "Too high! Try again.")
-
-            else:
-
-                messagebox.showinfo("Result", f"Congratulations! You guessed it in {self.guesses} tries.")
-
-        except ValueError:
-
-            messagebox.showerror("Error", "Please enter a valid number.")
+entry_temp.grid(row=0, column=1, padx=10, pady=10)
 
 
 
-    def new_game(self):
+selected_unit = tk.StringVar()
 
-        self.number = random.randint(1, 100)
+selected_unit.set('Celsius to Fahrenheit')
 
-        self.guesses = 0
+combo_units = ttk.Combobox(root, textvariable=selected_unit)
 
-        self.entry.delete(0, tk.END)
+combo_units['values'] = ('Celsius to Fahrenheit', 'Fahrenheit to Celsius')
 
-        messagebox.showinfo("New Game", "A new game has started. Guess the number!")
+combo_units.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 
 
 
-if __name__ == "__main__":
+button_convert = tk.Button(root, text='Convert', command=convert_temperature, bg='#008CBA', fg='white')
 
-    root = tk.Tk()
+button_convert.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-    game = NumberGuessingGame(root)
 
-    root.mainloop()
+
+label_result = tk.Label(root, text='Result:', bg='green', fg='white')
+
+label_result.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+
+
+
+# Run the main event loop
+
+root.mainloop()
+
+      
